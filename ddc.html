@@ -16,13 +16,22 @@ window.onload = function () {
 document.getElementById('collectionForm').submit(); 
 }; 
 // Listen for session ID via postMessage 
-window.addEventListener("message", function(event) { 
-const data = event.data; 
-if (data.MessageType === "profile.complete") { 
-const sessionId = data.Nonce; 
-alert("Session ID captured: " + sessionId); 
-} 
-}, false); 
+ window.addEventListener("message", function(event) {
+    console.log("Received postMessage:", event.data);
+
+    let data;
+    try {
+      data = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
+    } catch (e) {
+      console.error("Invalid JSON in postMessage:", e);
+      return;
+    }
+
+    if (data.MessageType === "profile.complete") {
+      const sessionId = data.Nonce;
+      alert("Session ID captured: " + sessionId);
+    }
+  });
 </script> 
 </body> 
 </html>
