@@ -1,0 +1,28 @@
+<html>
+<body>
+<form id="collectionForm" method="POST" action="">
+<input type="hidden" name="Bin" value="">
+<input type="hidden" name="JWT" value="">
+</form> 
+<div id="output" style="margin-top:20px; font-family:monospace; color:green;"></div>
+<script> 
+// Set form values from query parameters 
+const params = new URLSearchParams(location.search);
+document.getElementById('collectionForm').action = params.get('url');
+document.querySelector('input[name=Bin]').value = params.get('bin');
+document.querySelector('input[name=JWT]').value = params.get('jwt');
+// Submit the form on load 
+window.onload = function () { 
+document.getElementById('collectionForm').submit(); 
+}; 
+// Listen for session ID via postMessage 
+window.addEventListener("message", function(event) { 
+const data = event.data; 
+if (typeof data === "object" && data.MessageType === "profile.completed") { 
+const sessionId = data.SessionId; 
+document.getElementById("output").innerText = "Session ID captured: " + sessionId; 
+} 
+}, false); 
+</script> 
+</body> 
+</html>
