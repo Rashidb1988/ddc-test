@@ -47,7 +47,24 @@
       console.error("❌ Invalid JSON in postMessage:", e);
       return;
     }
+ // Forward to iOS if available
+      if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.callbackHandler) {
+        console.log("Forwarding to iOS");
+        window.webkit.messageHandlers.callbackHandler.postMessage(data);
+      }
 
+      // Forward to Android if available
+      if (window.Android && typeof window.Android.postMessage === "function") {
+        console.log("Forwarding to Android");
+        window.Android.postMessage(JSON.stringify(data)); // send as string
+      }
+
+      // OPTIONAL: Auto-close if in modal or hidden view
+      if (data.MessageType === "profile.completed") {
+        console.log("Profile completed, closing window if possible.");
+        // Uncomment below line if WebView supports it (like a close button callback)
+        // window.close();
+      }
     if (event.origin === "https://centinelapistag.cardinalcommerce.com" && data.Status === true) {
       const sessionId = data.SessionId;
       document.getElementById("output").innerText = "✅ This is New Session ID: " + sessionId;
