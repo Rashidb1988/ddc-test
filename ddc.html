@@ -19,7 +19,7 @@ document.getElementById('collectionForm').submit();
 window.addEventListener("message", function(event) { 
 const data = event.data; 
 if (typeof data === "object" && data.MessageType === "profile.complete") { 
-const sessionId = data.SessionId; 
+const sessionId = data.Nonce; 
 alert("Session ID captured: " + sessionId); 
 } 
 }, false); 
