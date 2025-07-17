@@ -1,43 +1,61 @@
+<!DOCTYPE html>
 <html>
+<head>
+  <meta charset="UTF-8">
+  <title>PostMessage Listener Page</title>
+</head>
 <body>
-<form id="collectionForm" method="POST" action="">
-<input type="hidden" name="Bin" value="">
-<input type="hidden" name="JWT" value="">
-</form> 
-<div id="output" style="margin-top:20px; font-family:monospace; color:green;"></div>
-<script> 
-// Set form values from query parameters 
-const params = new URLSearchParams(location.search);
-document.getElementById('collectionForm').action = params.get('url');
-document.querySelector('input[name=Bin]').value = params.get('bin');
-document.querySelector('input[name=JWT]').value = params.get('jwt');
-// Submit the form on load 
-window.onload = function () { 
-document.getElementById('collectionForm').submit(); 
-}; 
-// Listen for session ID via postMessage 
-console.log("postMessage listener attached");
+  <h2>Auto-submitting form with postMessage listener</h2>
 
-  window.addEventListener("message", function(event) {
-    console.log("Full event:", event);
-    console.log("Received postMessage:", event.data);
-    console.log("Type of data:", typeof event.data);
+  <!-- Hidden iframe to keep the current page alive -->
+  <iframe id="postTargetFrame" name="postTargetFrame" style="display:none;"></iframe>
 
-    let data;
-    try {
-      data = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
-    } catch (e) {
-      console.error("Invalid JSON in postMessage:", e);
-      return;
-    }
+  <!-- Form that submits to the URL via POST inside the iframe -->
+  <form id="collectionForm" method="POST" target="postTargetFrame" action="">
+    <input type="hidden" name="Bin" value="">
+    <input type="hidden" name="JWT" value="">
+  </form>
 
-    if (data.MessageType === "profile.complete") {
-      const sessionId = data.Nonce;
-      alert("Session ID captured: " + sessionId);
-    } else {
-      console.log("Not the expected message type:", data.MessageType);
-    }
-  }, false);
-</script> 
-</body> 
+  <div id="output" style="margin-top:20px; font-family:monospace; color:green;"></div>
+
+  <script>
+    // 1. Read query params and populate the form
+    const params = new URLSearchParams(location.search);
+    const form = document.getElementById('collectionForm');
+    form.action = params.get('url') || '';
+    document.querySelector('input[name=Bin]').value = params.get('bin') || '';
+    document.querySelector('input[name=JWT]').value = params.get('jwt') || '';
+
+    // 2. Submit the form inside iframe after page loads
+    window.onload = function () {
+      console.log("🚀 Submitting form to:", form.action);
+      form.submit();
+    };
+
+    // 3. Listen for postMessage from the iframe target
+    console.log("👂 postMessage listener attached");
+
+    window.addEventListener("message", function(event) {
+      console.log("📨 Full event:", event);
+      console.log("📨 Data received:", event.data);
+      console.log("📨 Data type:", typeof event.data);
+
+      let data;
+      try {
+        data = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
+      } catch (e) {
+        console.error("❌ Invalid JSON in postMessage:", e);
+        return;
+      }
+
+      if (data.MessageType === "profile.complete") {
+        const sessionId = data.Nonce;
+        document.getElementById("output").innerText = "✅ Session ID: " + sessionId;
+        alert("✅ Session ID captured: " + sessionId);
+      } else {
+        console.log("ℹ️ Unexpected message type:", data.MessageType);
+      }
+    }, false);
+  </script>
+</body>
 </html>
