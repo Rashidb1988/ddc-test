@@ -18,7 +18,7 @@ document.getElementById('collectionForm').submit();
 // Listen for session ID via postMessage 
 window.addEventListener("message", function(event) { 
 const data = event.data; 
-if (typeof data === "object" && data.MessageType === "profile.completed") { 
+if (typeof data === "object" && data.MessageType === "profile.complete") { 
 const sessionId = data.SessionId; 
 alert("Session ID captured: " + sessionId); 
 } 
