@@ -33,29 +33,29 @@
     };
 
     // 3. Listen for postMessage from the iframe target
-    console.log("👂 postMessage listener attached");
+  console.log("👂 postMessage listener attached");
 
-    window.addEventListener("message", function(event) {
-      console.log("📨 Full event:", event);
-      console.log("📨 Data received:", event.data);
-      console.log("📨 Data type:", typeof event.data);
+  window.addEventListener("message", function(event) {
+    console.log("📨 Full event:", event);
+    console.log("📨 Data received:", event.data);
+    console.log("📨 Data type:", typeof event.data);
 
-      let data;
-      try {
-        data = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
-      } catch (e) {
-        console.error("❌ Invalid JSON in postMessage:", e);
-        return;
-      }
+    let data;
+    try {
+      data = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
+    } catch (e) {
+      console.error("❌ Invalid JSON in postMessage:", e);
+      return;
+    }
 
-      if (data.MessageType === "profile.complete") {
-        const sessionId = data.Nonce;
-        document.getElementById("output").innerText = "✅ Session ID: " + sessionId;
-        alert("✅ Session ID captured: " + sessionId);
-      } else {
-        console.log("ℹ️ Unexpected message type:", data.MessageType);
-      }
-    }, false);
+    if (data.MessageType === "profile.completed" && data.Status === true) {
+      const sessionId = data.SessionId;
+      document.getElementById("output").innerText = "✅ Session ID: " + sessionId;
+      alert("✅ Session ID captured: " + sessionId);
+    } else {
+      console.log("ℹ️ Unexpected or unhandled message type:", data.MessageType);
+    }
+  }, false);
   </script>
 </body>
 </html>
