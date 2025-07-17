@@ -51,11 +51,11 @@
     if (data.Status === "true") {
       const sessionId = data.SessionId;
       document.getElementById("output").innerText = "✅ Session ID: " + sessionId;
-      alert("✅ Session ID captured: " + sessionId);
+      console.log("✅ Session ID captured: " + sessionId);
     } else {
 const sessionId = data.SessionId;
       document.getElementById("output").innerText = "✅ Session ID: " + sessionId;
-      alert("✅ Session ID captured: " + sessionId);
+      console.log("✅ Session ID captured: " + sessionId);
     }
   }, false);
   </script>
