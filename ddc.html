@@ -20,7 +20,7 @@ window.addEventListener("message", function(event) {
 const data = event.data; 
 if (typeof data === "object" && data.MessageType === "profile.completed") { 
 const sessionId = data.SessionId; 
-document.getElementById("output").innerText = "Session ID captured: " + sessionId; 
+alert("Session ID captured: " + sessionId); 
 } 
 }, false); 
 </script> 
