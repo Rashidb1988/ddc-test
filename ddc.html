@@ -48,7 +48,7 @@
       return;
     }
 
-    if (data.MessageType === "profile.completed" && data.Status === true) {
+    if (data.Status === true) {
       const sessionId = data.SessionId;
       document.getElementById("output").innerText = "✅ Session ID: " + sessionId;
       alert("✅ Session ID captured: " + sessionId);
