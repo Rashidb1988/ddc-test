@@ -16,8 +16,12 @@ window.onload = function () {
 document.getElementById('collectionForm').submit(); 
 }; 
 // Listen for session ID via postMessage 
- window.addEventListener("message", function(event) {
+console.log("postMessage listener attached");
+
+  window.addEventListener("message", function(event) {
+    console.log("Full event:", event);
     console.log("Received postMessage:", event.data);
+    console.log("Type of data:", typeof event.data);
 
     let data;
     try {
@@ -30,8 +34,10 @@ document.getElementById('collectionForm').submit();
     if (data.MessageType === "profile.complete") {
       const sessionId = data.Nonce;
       alert("Session ID captured: " + sessionId);
+    } else {
+      console.log("Not the expected message type:", data.MessageType);
     }
-  });
+  }, false);
 </script> 
 </body> 
 </html>
