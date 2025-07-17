@@ -48,13 +48,13 @@
       return;
     }
 
-    if (data.Status === true) {
+    if (event.origin === "https://centinelapistag.cardinalcommerce.com" && data.Status === true) {
       const sessionId = data.SessionId;
-      document.getElementById("output").innerText = "✅ New Session ID: " + sessionId;
+      document.getElementById("output").innerText = "✅ This is New Session ID: " + sessionId;
       console.log("✅ Session ID captured: " + sessionId);
     } else {
 const sessionId = data.SessionId;
-      document.getElementById("output").innerText = "❌ Session ID not captured";
+      document.getElementById("output").innerText = "❌ This Session ID not captured";
       console.log("❌ Session ID not captured");
     }
   }, false);
